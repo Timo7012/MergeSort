@@ -1,0 +1,46 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+int* merge_sort(int* array,int left,int right){
+    if (left == right){
+        int* t_arr = (int*)malloc(sizeof(int));
+        t_arr[0] = array[left];
+        return t_arr;
+    }
+    int middle = (right + left) / 2;
+    int* left_array = merge_sort(array,left,middle);
+    int* right_array = merge_sort(array,middle + 1,right);
+    left = middle - left + 1;
+    right = right - middle;
+    int* t_arr = (int*)malloc((right + left)*sizeof(int));
+    for(int left_v = 0,right_v = 0,i = 0; (right_v + left_v) < (right + left);++i){
+        if (left_array[left_v] < right_array[right_v] && left_v < left){
+            t_arr[i] = left_array[left_v++];
+        } else if (right_v < right) {
+            t_arr[i] = right_array[right_v++];
+        } else {
+            t_arr[i] = left_array[left_v++];
+        }
+    }
+    free(left_array);
+    free(right_array);
+    return t_arr;
+}
+
+int main(){
+    int n;
+    printf("Size of array:");
+    scanf("%d",&n);
+    printf("Elements of array:");
+    int* array = (int*)malloc(n*sizeof(int));
+    for (int i = 0;i < n; ++i){
+        scanf("%d", &array[i]);
+    }
+    int* srt_array = merge_sort(array,0,n-1);
+    free(array);
+    for (int i = 0; i < n; ++i){
+        printf("%d ", srt_array[i]);
+    }
+    free(srt_array);
+    return 0;
+}
